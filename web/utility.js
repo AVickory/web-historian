@@ -17,10 +17,21 @@ exports.sendResponse = function (res, data, statusCode, contentType) {
 exports.collectData = function (dataStream, callback) {
   var rawData = '';
   dataStream.on('data', function (data) {
-    rawData += data
+    rawData += data;
   });
   dataStream.on('end', function () {
     console.log('utility callback thing ',rawData);
     return callback(rawData);
   });
 }
+
+// exports.collectData2 = function (dataStream, res, callback) {
+//   var rawData = '';
+//   dataStream.on('data', function (data) {
+//     res.write(data);
+//   });
+//   dataStream.on('end', function () {
+//     console.log('utility callback thing ',rawData);
+//     return callback(rawData);
+//   });
+// }

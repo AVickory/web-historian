@@ -34,11 +34,9 @@ var actions =  {
       // sendResponse(res, JSON.stringify(archive.isUrlArchived(filePath)), 200)
       if(!archive.isUrlArchived(filePath)) {
         utility.sendResponse(res, null, 404);
+        return;
       }
     }
-
-    console.log(filePath)
-
 
     file = fs.createReadStream(filePath)
     
@@ -46,9 +44,13 @@ var actions =  {
 
       //console.log(html);
     utility.collectData(file, function (data) {
-      console.log('line 47',data)
       utility.sendResponse(res, data, 200, contentType);
     });
+
+    // utility.collectData2(file, res, function (data) {
+    //   console.log('line 47',data)
+    //   utility.sendResponse(res, null, 200, contentType);
+    // });
         //utility.collectData(req, function (websiteUrl) {
           // if(archive.isUrlArchived(websiteUrl)) {
           //   //send the website

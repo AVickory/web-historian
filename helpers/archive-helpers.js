@@ -47,26 +47,46 @@ exports.initialize = function(pathsObj) {
 // The following function names are provided to you to suggest how you might
 // modularize your code. Keep it clean!
 
-exports.readListOfUrls = function() {
-  // return urlArr.slice();
+exports.readListOfUrls = function(callback) {
+  var text;
+  var read = fs.createReadStream(exports.paths.list);
+  utility.collectData(read, function (readData) {
+    text = readData;
+    var arr = text.split('\n');
+    callback(arr)
+  });
 };
 
-exports.isUrlInList = function(url) {
-  // return urlArr[url] !== undefined;
-};
-
-exports.addUrlToList = function() {
-
-};
-
-exports.isUrlArchived = function(url) {
-  var foundIt = false;
-  fs.exists(url, function (exists) {
-    foundIt = exists
+exports.isUrlInList = function(url, callback) {
+  exports.readListOfUrls(function (urlArray) {
+    callback( urlArray.indexOf(url) !== -1 ); 
   })
-  return foundIt;
 };
 
-exports.downloadUrls = function() {
+exports.addUrlToList = function(url, callback) {
+  exports.isUrlInList(url, function (inList) {
+    if ( !inList ) {
+      fs.appendFile(exports.paths.list, url + ('\n'), callback);
+    }
+  })
+};
+
+exports.isUrlArchived = function(url, callback) {
+  fs.exists(url, function (exists) {
+    callback(exists);
+  })
+};
+
+exports.downloadUrls = function(urlArray) {
+  for ( var i = 0; i < urlArray.length; i++ ) {
+    exports.isUrlArchived(urlArray[i], function (isArchived) {
+      if ( !isArchived ) {
+        //DOWNLOAD THE URL, SO EASY, DUH
+      } else {
+        //RETURN THE URL TO GO TO? MAYBE?
+      }
+    })
+  }
+
 };
 
