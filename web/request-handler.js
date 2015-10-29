@@ -15,7 +15,7 @@ var actions =  {
       //else
         //put address on urlList
         //tell user to wait
-    
+    var url = 
 
   }
 }

@@ -1,5 +1,5 @@
 var http = require("http");
-var handler = require("./request-handler");
+var handler = require("./server-handler");
 var initialize = require("./initialize.js");
 
 // Why do you think we have this here?
