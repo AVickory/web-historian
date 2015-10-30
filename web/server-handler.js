@@ -29,40 +29,23 @@ var actions =  {
     } else {
       filePath = path.join(archive.paths.archivedSites, req.url);
 
-
-      // contentType = 'application/json'
-      // sendResponse(res, JSON.stringify(archive.isUrlArchived(filePath)), 200)
-      if(!archive.isUrlArchived(filePath)) {
-        utility.sendResponse(res, null, 404);
-        return;
-      }
+      archive.isUrlArchived(filePath, function (isArchived, address) {
+        console.log('it is archived: ', isArchived)
+        if(!isArchived) {
+          utility.sendResponse(res, null, 404);
+        } else {
+          console.log('GETREQUEST')
+          utility.sendFile(res, address, 200, false);
+        }
+      });
+      return;
     }
 
     file = fs.createReadStream(filePath)
-    
-    // console.log(url.parse(req.url))
 
-      //console.log(html);
     utility.collectData(file, function (data) {
       utility.sendResponse(res, data, 200, contentType);
     });
-
-    // utility.collectData2(file, res, function (data) {
-    //   console.log('line 47',data)
-    //   utility.sendResponse(res, null, 200, contentType);
-    // });
-        //utility.collectData(req, function (websiteUrl) {
-          // if(archive.isUrlArchived(websiteUrl)) {
-          //   //send the website
-          // } else {
-          //   //fuck yo couch/404
-          // }
-          //utility.sendResponse(res, data, 200, contentType);
-        //})
-
-    
-
-
   },
   'POST': function (req, res) {
 
@@ -72,6 +55,19 @@ var actions =  {
       //else
         //put address on urlList
         //tell user to wait
+    utility.collectData(req, function (data) {
+      console.log(data)
+
+      archive.addUrlToList(data.slice(4), function () {})
+    })
+
+    var filePath = path.join(archive.paths.siteAssets, '/loading.html');
+    var file = fs.createReadStream(filePath)
+
+    utility.collectData(file, function (data) {
+      utility.sendResponse(res, null, 302);
+    });
+
 
   }
 }

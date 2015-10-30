@@ -1,7 +1,9 @@
 var fs = require('fs');
+var http = require("http");
 var path = require('path');
 var _ = require('underscore');
 var utility = require('../web/utility');
+var httpWrap = require('http-request')
 
 /*
  * You will need to reuse the same paths many times over in the course of this sprint.
@@ -71,20 +73,30 @@ exports.addUrlToList = function(url, callback) {
   })
 };
 
-exports.isUrlArchived = function(url, callback) {
+exports.isUrlArchived = function(url, callback, index) {
   fs.exists(url, function (exists) {
-    callback(exists);
+    callback(exists, url);
   })
 };
 
-exports.downloadUrls = function(urlArray) {
-  for ( var i = 0; i < urlArray.length; i++ ) {
-    exports.isUrlArchived(urlArray[i], function (isArchived) {
+exports.downloadUrls = function(urlArr) {
+  for ( var i = 0; i < urlArr.length; i++ ) { //port: 8080};
+    var url = urlArr[i];
+    exports.isUrlArchived(url, function (isArchived, url) {
       if ( !isArchived ) {
         //DOWNLOAD THE URL, SO EASY, DUH
-      } else {
-        //RETURN THE URL TO GO TO? MAYBE?
-      }
+
+        httpWrap.get(url, function (err, res) {
+          if(err || res.code === 404) {
+            console.log("I can't do that john");
+          } else {
+            fs.writeFile(path.join(exports.paths.archivedSites, url), res.buffer.toString())
+          }
+
+        });
+
+      } 
+
     })
   }
 
