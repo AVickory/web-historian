@@ -48,13 +48,6 @@ var actions =  {
     });
   },
   'POST': function (req, res) {
-
-    //take in request url
-      //check if it's been downloaded
-        // tell user where to look
-      //else
-        //put address on urlList
-        //tell user to wait
     utility.collectData(req, function (data) {
       console.log(data)
 
@@ -65,7 +58,7 @@ var actions =  {
     var file = fs.createReadStream(filePath)
 
     utility.collectData(file, function (data) {
-      utility.sendResponse(res, null, 302);
+      utility.sendResponse(res, data, 302);
     });
 
 

@@ -80,7 +80,7 @@ exports.isUrlArchived = function(url, callback, index) {
 };
 
 exports.downloadUrls = function(urlArr) {
-  for ( var i = 0; i < urlArr.length; i++ ) { //port: 8080};
+  for ( var i = 0; i < urlArr.length-1; i++ ) { //port: 8080};
     var url = urlArr[i];
     exports.isUrlArchived(url, function (isArchived, url) {
       if ( !isArchived ) {

@@ -1,5 +1,4 @@
-archive = require('../helpers/archive-helpers');
-// cron = require('cron');
+var archive = require('../helpers/archive-helpers');
 
 archive.readListOfUrls(function (urlArr) {
   archive.downloadUrls(urlArr);
